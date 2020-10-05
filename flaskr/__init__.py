@@ -27,9 +27,13 @@ def create_app(test_config=None):
     # register database function
     from . import db
     db.init_app(app)
-	
+    
+    # Authentication
+    from . import auth
+    app.register_blueprint(auth.bp)
+
     # a simple page that says hello
-    @app.route('/hello')
+    @app.route('/')
     def hello():
         return 'Hello, World!'
 
