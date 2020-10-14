@@ -22,15 +22,15 @@ def page_not_found(e):
     return "<h1 style='text-align:center'>404</h1><h3 style='text-align:center'>The page could not be found.</h3>", 404
 
 @bp.route('/resources/posts/all', methods=['GET'])
-@login_required
 def api_posts_all():
     db = get_db()
-    db.row_factory = dict_factory
-    posts = db.execute(
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(
         'SELECT     p.id, title, body, created, username'
         ' FROM post p JOIN user u ON p.author_id = u.id' 
         ' ORDER BY created DESC'
-    ).fetchall()
+    )
+    posts = cursor.fetchall()
     
     return jsonify(posts)
     
@@ -66,7 +66,8 @@ def api_post_filter():
     query = query[:-4] + ';'
 
     db = get_db()
-    db.row_factory = dict_factory
-    posts = db.execute(query, to_filter).fetchall()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(query, to_filter)
+    posts = cursor.execute(query, to_filter).fetchall()
     
     return jsonify(posts)
