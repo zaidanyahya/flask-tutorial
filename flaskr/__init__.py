@@ -36,6 +36,14 @@ def create_app(test_config=None):
     from . import blog
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
+    
+    # API
+    from . import api
+    app.register_blueprint(api.bp)
+    
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return "<h1 style='text-align:center'>404</h1><h3 style='text-align:center'>The page could not be found.</h3>", 404
 
     # a simple page that says hello
     @app.route('/')
