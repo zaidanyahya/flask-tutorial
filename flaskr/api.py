@@ -49,16 +49,16 @@ def api_post_filter():
     to_filter = []
 
     if pid:
-        query += ' p.id=? AND'
+        query += ' p.id=%s AND'
         to_filter.append(pid)
     if title:
-        query += ' title=? AND'
+        query += ' title=%s AND'
         to_filter.append(title)
     if author_id:
-        query += ' author_id=? AND'
+        query += ' author_id=%s AND'
         to_filter.append(author_id)
     if date:
-        query += ' created=? AND'
+        query += ' created=%s AND'
         to_filter.append(date) 
     if not (pid or title or author_id or date):
         return page_not_found(404)
@@ -68,6 +68,5 @@ def api_post_filter():
     db = get_db()
     cursor = db.cursor(dictionary=True)
     cursor.execute(query, to_filter)
-    posts = cursor.execute(query, to_filter).fetchall()
-    
+    posts = cursor.fetchall()
     return jsonify(posts)
